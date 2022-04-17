@@ -89,8 +89,8 @@ function App() {
       setSnake({ ...snake, snakeDots: newSnakeDots });
       console.log(snake);
       return;
-    }, 250);
-  }, [snake, food]);
+    }, 150);
+  }, [snake]);
 
   document.onkeydown = handleKey;
 
