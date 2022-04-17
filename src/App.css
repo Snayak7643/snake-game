@@ -1,0 +1,26 @@
+.center {
+  text-align: center;
+}
+.game-area {
+  position: relative;
+  height: 500px;
+  width: 500px;
+  margin: 20px auto;
+  border: 1px solid white;
+}
+.snake-dots {
+  position: absolute;
+  background-color: wheat;
+  height: 2%;
+  width: 2%;
+  border: 1px solid #282c34;
+  z-index: 2;
+}
+.food-dot {
+  position: absolute;
+  background-color: rgb(241, 125, 241);
+  height: 2%;
+  width: 2%;
+  border: 1px solid #282c34;
+  z-index: 1;
+}
