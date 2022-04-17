@@ -21,7 +21,7 @@ function App() {
     direction: "RIGHT",
   };
   const [snake, setSnake] = useState(initialState);
-  const [food, setFood] = useState([]);
+  const [food, setFood] = useState(getRandom());
 
   const handleKey = (e) => {
     e = e || window.event;
@@ -47,10 +47,6 @@ function App() {
         console.log("wrong key");
     }
   };
-
-  useEffect(() => {
-    setFood(getRandom());
-  }, []);
 
   useEffect(() => {
     setTimeout(() => {
@@ -80,12 +76,21 @@ function App() {
       }
       if (head[0] >= 100 || head[0] < 0 || head[1] >= 100 || head[1] < 0) {
         alert("GAME OVER");
-        setSnake(initialState);
+        setSnake({
+          snakeDots: [
+            [0, 0],
+            [0, 2],
+            [0, 4],
+          ],
+          direction: "RIGHT",
+        });
         return;
       }
       setSnake({ ...snake, snakeDots: newSnakeDots });
-    }, 30);
-  }, [snake]);
+      console.log(snake);
+      return;
+    }, 250);
+  }, [snake, food]);
 
   document.onkeydown = handleKey;
 
