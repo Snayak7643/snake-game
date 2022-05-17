@@ -19,28 +19,50 @@ function App() {
       [0, 4],
     ],
     direction: "RIGHT",
+    speed: 280,
   };
   const [snake, setSnake] = useState(initialState);
   const [food, setFood] = useState(getRandom());
+  const [count, setCount] = useState(0);
+  const [best, setBest] = useState(0);
+
+  const gameOver = (head) => {
+    let t = false;
+    snake.snakeDots.forEach((dots) => {
+      if (dots[0] === head[0] && dots[1] === head[1]) {
+        t = true;
+      }
+    });
+    console.log(t);
+    return t;
+  };
 
   const handleKey = (e) => {
     e = e || window.event;
     let newState = snake;
     switch (e.keyCode) {
       case 38:
-        newState.direction = "UP";
+        if (snake.direction !== "DOWN") {
+          newState.direction = "UP";
+        }
         setSnake(newState);
         break;
       case 40:
-        newState.direction = "DOWN";
+        if (snake.direction !== "UP") {
+          newState.direction = "DOWN";
+        }
         setSnake(newState);
         break;
       case 37:
-        newState.direction = "LEFT";
+        if (snake.direction !== "RIGHT") {
+          newState.direction = "LEFT";
+        }
         setSnake(newState);
         break;
       case 39:
-        newState.direction = "RIGHT";
+        if (snake.direction !== "LEFT") {
+          newState.direction = "RIGHT";
+        }
         setSnake(newState);
         break;
       default:
@@ -51,6 +73,7 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       let newSnakeDots = [...snake.snakeDots];
+      let newSpeed = snake.speed;
       let head = newSnakeDots[newSnakeDots.length - 1];
       switch (snake.direction) {
         case "RIGHT":
@@ -73,9 +96,17 @@ function App() {
         newSnakeDots.shift();
       } else {
         setFood(getRandom());
+        if (count + 1 > best) {
+          setBest(count + 1);
+        }
+        setCount(count + 1);
+        if (newSpeed > 50) {
+          newSpeed = snake.speed - 20;
+        }
       }
       if (head[0] >= 100 || head[0] < 0 || head[1] >= 100 || head[1] < 0) {
         alert("GAME OVER");
+        setCount(0);
         setSnake({
           snakeDots: [
             [0, 0],
@@ -83,13 +114,28 @@ function App() {
             [0, 4],
           ],
           direction: "RIGHT",
+          speed: 280,
         });
         return;
       }
-      setSnake({ ...snake, snakeDots: newSnakeDots });
+      if (gameOver(head) === false) {
+        setSnake({ ...snake, snakeDots: newSnakeDots, speed: newSpeed });
+      } else {
+        alert("GAME OVER");
+        setCount(0);
+        setSnake({
+          snakeDots: [
+            [0, 0],
+            [0, 2],
+            [0, 4],
+          ],
+          direction: "RIGHT",
+          speed: 280,
+        });
+      }
       console.log(snake);
       return;
-    }, 150);
+    }, snake.speed);
   }, [snake]);
 
   document.onkeydown = handleKey;
@@ -100,6 +146,10 @@ function App() {
       <div className="game-area">
         <Snake snakeDots={snake.snakeDots} />
         <Food food={food} />
+      </div>
+      <div className="result">
+        <h2>Count: {count}</h2>
+        <h2>Best: {best}</h2>
       </div>
     </div>
   );
