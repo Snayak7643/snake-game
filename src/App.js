@@ -143,6 +143,7 @@ function App() {
   return (
     <div className="center">
       <h1>Snake-Game</h1>
+      <h2>hello</h2>
       <div className="game-area">
         <Snake snakeDots={snake.snakeDots} />
         <Food food={food} />
